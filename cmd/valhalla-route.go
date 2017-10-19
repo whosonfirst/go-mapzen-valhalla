@@ -5,6 +5,9 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"github.com/whosonfirst/go-whosonfirst-geojson-v2/feature"
+	"github.com/whosonfirst/go-whosonfirst-geojson-v2/properties/whosonfirst"	
+	"github.com/whosonfirst/go-whosonfirst-uri"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -16,6 +19,44 @@ import (
 type Point struct {
 	Latitude  float64
 	Longitude float64
+}
+
+func NewPointFromWOFId(id int64) (*Point, error) {
+
+	url, err := uri.Id2AbsPath("https://whosonfirst.mapzen.com/data/", id)
+
+	if err != nil {
+		return nil, err
+	}
+
+	rsp, err := http.Get(url)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer rsp.Body.Close()
+
+	f, err := feature.LoadFeatureFromReader(rsp.Body)
+
+	if err != nil {
+		return nil, err
+	}
+
+	c, err := whosonfirst.Centroid(f)
+
+	if err != nil {
+		return nil, err
+	}
+
+	coord := c.Coord()
+
+	pt := Point{
+		Latitude:  coord.Y,
+		Longitude: coord.X,
+	}
+
+	return &pt, nil
 }
 
 func NewPointFromString(str_latlon string) (*Point, error) {
@@ -84,9 +125,9 @@ func (v *Valhalla) Route(from *Point, to *Point, costing string) ([]byte, error)
 	body, err := json.Marshal(journey)
 
 	if err != nil {
-	   return nil, err
+		return nil, err
 	}
-	
+
 	query := url.Values{}
 	query.Set("json", string(body))
 	query.Set("api_key", v.ApiKey)
@@ -129,25 +170,61 @@ func (v *Valhalla) Route(from *Point, to *Point, costing string) ([]byte, error)
 
 func main() {
 
-	api_key := flag.String("api-key", "mapzen-xxxxxx", "...")
-	endpoint := flag.String("endpoint", "valhalla.mapzen.com", "...")
-	costing := flag.String("costing", "auto", "...")
+	api_key := flag.String("api-key", "mapzen-xxxxxx", "A valid Mapzen API key.")
+	endpoint := flag.String("endpoint", "valhalla.mapzen.com", "A valid Valhalla API endpoint.")
+	costing := flag.String("costing", "auto", "A valid Valhalla costing.")
 
-	str_from := flag.String("from", "", "...")
-	str_to := flag.String("to", "", "...")
+	str_from := flag.String("from", "", "Starting latitude,longitude position.")
+	str_to := flag.String("to", "", "Destination latitude,longitude position.")
+
+	from_wofid := flag.Int64("from-wofid", 0, "Starting Who's On First ID.")
+	to_wofid := flag.Int64("to-wofid", 0, "Destination Who's On First ID.")
 
 	flag.Parse()
 
-	from, err := NewPointFromString(*str_from)
+	var from *Point
+	var to *Point
 
-	if err != nil {
-		log.Fatal(err)
+	if *from_wofid != 0 {
+
+		f, err := NewPointFromWOFId(*from_wofid)
+
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		from = f
+
+	} else {
+
+		f, err := NewPointFromString(*str_from)
+
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		from = f
 	}
 
-	to, err := NewPointFromString(*str_to)
+	if *to_wofid != 0 {
 
-	if err != nil {
-		log.Fatal(err)
+		t, err := NewPointFromWOFId(*to_wofid)
+
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		to = t
+
+	} else {
+
+		t, err := NewPointFromString(*str_to)
+
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		to = t
 	}
 
 	v := Valhalla{
