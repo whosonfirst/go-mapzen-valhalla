@@ -1,8 +1,6 @@
 # go-mapzen-valhalla
 
-## Important
-
-Too soon. Move along.
+Minimal viable Go bindings for doing minimal viable things with the Mapzen Valhalla API.
 
 ## Install
 
@@ -17,6 +15,25 @@ All of this package's dependencies are bundled with the code in the `vendor` dir
 ## Tools
 
 ### valhalla-route
+
+```
+./bin/valhalla-route -h
+Usage of ./bin/valhalla-route:
+  -api-key string
+    	A valid Mapzen API key. (default "mapzen-xxxxxx")
+  -costing string
+    	A valid Valhalla costing. (default "auto")
+  -endpoint string
+    	A valid Valhalla API endpoint. (default "valhalla.mapzen.com")
+  -from string
+    	Starting latitude,longitude position.
+  -from-wofid int
+    	Starting Who's On First ID.
+  -to string
+    	Destination latitude,longitude position.
+  -to-wofid int
+    	Destination Who's On First ID.
+```
 
 For example:
 
