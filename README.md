@@ -62,7 +62,9 @@ You can also pass the `valhalla-route` tool [Who's On First](https://whosonfirst
 "cajagAryumhF~H}JrVq\\tYm_@jBhClO~R~kAy~A~kAi_Bju@rcAln@p{@zZxa@xa@jk@jG]dELvDl@zE|@tExA|ExBzEfDzFfErFbFpGpG`H`HzG~HhWb\\|DbFvHlJze@nh@|JvN|JtOdJtOnIvNfItOdcAzqBlEzL~C`HnDpGjF~HrF`HbGpHvH~HfI~HpHrG~HpGvIbGfX`RnDfC~CxCnCvCxCdEnCvDjBtEbAdEl@bF`Bb\\l@~HdAxLrKvNzd@bo@hRhWx\\de@p\\dd@`R{VtO_Sli@_r@tn@o}@~NoStEuE|NeO~HsFzLsFhL]bR}@fg@yBnS}@zPk@li@iC~SkAbAfc@dAng@`Bbp@jBdx@pB`|@pB`{@fS{@"
 ```
 
-Valhalla polylines can then be handed off to the [Mapzen Places `mapzen.places.getByPolyline` API method](https://mapzen.com/documentation/places/methods/#mapzen.places.getByPolyline). For example, here are the unique [postal codes](https://whosonfirst.mapzen.com/spelunker/placetypes/postalcode) you would pass through traveling from the [Mapzen offices](https://places.mapzen.com/id/1108798585/), in downtown San Francisco, to [Zeitgeist](https://places.mapzen.com/id/270097925), in the Mission:
+Valhalla polylines can then be handed off to the [Mapzen Places `mapzen.places.getByPolyline` API method](https://mapzen.com/documentation/places/methods/#mapzen.places.getByPolyline).
+
+For example, here are the unique [postal codes](https://whosonfirst.mapzen.com/spelunker/placetypes/postalcode) you would pass through traveling from the [Mapzen offices](https://places.mapzen.com/id/1108798585/), in downtown San Francisco, to [Zeitgeist](https://places.mapzen.com/id/270097925), in the Mission:
 
 ```
 curl -s 'https://places.mapzen.com/v1?api_key=mapzen-******&method=whosonfirst.places.getByPolyline&polyline=cajagAryumhF%7EH%7DJrVq%5CtYm_%40jBhClO%7ER%7EkAy%7EA%7EkAi_Bju%40rcAln%40p%7B%40zZxa%40xa%40jk%40jG%5DdELvDl%40zE%7C%40tExA%7CExBzEfDzFfErFbFpGpG%60H%60HzG%7EHhWb%5C%7CDbFvHlJze%40nh%40%7CJvN%7CJtOdJtOnIvNfItOdcAzqBlEzL%7EC%60HnDpGjF%7EHrF%60HbGpHvH%7EHfI%7EHp%5C+HrG%7EHpGvIbGfX%60RnDfC%7ECxCnCvCxCdEnCvDjBtEbAdEl%40bF%60Bb%5Cl%40%7EHdAxLrKvNzd%40bo%40hRhWx%5Cde%40p%5Cdd%40%60R%7BVtO_Sli%40_r%40tn%40o%7D%40%7ENoStEuE%7CNeO%7EHsFzLsFhL%5DbR%7D%40fg%40yBnS%7D%40zPk%40li%40iC%7ESkAbAfc%40dAng%40%60Bbp%40jBdx%40pB%60%7C%40pB%60%7B%40fS%7B%40&precision=6&unique=1&placetype=postalcode' | python -mjson.tool
@@ -113,7 +115,7 @@ curl -s 'https://places.mapzen.com/v1?api_key=mapzen-******&method=whosonfirst.p
 }
 ```
 
-_Note that a) the polyline is URL-encoded and b) we are explicitly passing a `precision=6` parameter to distinguish the polyline from the usual 5-decimal precision polylines that Google uses._
+_Note that a) the polyline in the API call is URL-encoded and b) we are explicitly passing a `precision=6` parameter to distinguish the polyline from the usual 5-decimal precision polylines that Google uses._
 
 ## See also
 
