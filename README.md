@@ -55,7 +55,7 @@ $> valhalla-route  -api-key mapzen-xxxxx -from 40.759220,-73.987126 -to 40.76585
 "Your destination is on the right."
 ```
 
-You can also pass the `valhalla-route` tool Who's On First IDs to route to and from. For example:
+You can also pass the `valhalla-route` tool [Who's On First](https://whosonfirst.mapzen.com) IDs to route to and from. For example:
 
 ```
 ./bin/valhalla-route -api-key mapzen-xxxxxx -from-wofid 1108798585 -to-wofid 270097925 | jq '.trip.legs[].shape'
@@ -117,6 +117,7 @@ _Note that a) the polyline is URL-encoded and b) we are explicitly passing a `pr
 
 ## See also
 
+* https://mapzen.com/developers
 * https://mapzen.com/documentation/mobility/turn-by-turn/overview/
 * https://mapzen.com/documentation/places/
 * http://whosonfirst.mapzen.com
